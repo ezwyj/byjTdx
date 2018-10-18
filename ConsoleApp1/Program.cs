@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Tesseract;
+
 
 namespace ConsoleApp1
 {
@@ -16,6 +17,10 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
+
+
+
+
             //IntPtr ptr = (IntPtr)0x20BA6;
             //Rect AppRect = new Rect();
             //GetWindowRect(ptr, ref AppRect);
@@ -53,17 +58,41 @@ namespace ConsoleApp1
 
             //    }), (IntPtr)0);
             //}
-            var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
-            ocr.SetVariable("tessedit_char_whitelist", "0123456789");
+            //var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
+            //ocr.SetVariable("tessedit_char_whitelist", "0123456789");
             DateTime start = DateTime.Now;
-            var img = new Bitmap(@"c:\bb.png");
-            //var img = CaptureScreen(1525, 187, 200, 20);
+            //var img = new Bitmap(@"c:\bb.png");
+            ////var img = CaptureScreen(1525, 187, 200, 20);
             
-            var page = ocr.Process(img);
-            var result = page.GetText();
+            //var page = ocr.Process(img);
+            //var result = page.GetText();
             DateTime end = DateTime.Now;
             TimeSpan sp = end - start;
-            Console.WriteLine("{0}", result);
+            var ProcessList = Process.GetProcessesByName("DZH2");
+            var DzhProcessId = 0;
+            foreach(var item in ProcessList)
+            {
+                if (item.MainWindowTitle.IndexOf("大智慧") > 0)
+                {
+                    DzhProcessId = item.Id;
+                }
+            }
+           
+            var result = Process.GetProcessById(DzhProcessId).MainWindowHandle;
+            var hWnd = result;
+            IntPtr hscrdc = Win32Api.GetWindowDC(hWnd);
+            Rectangle windowRect = new Rectangle();
+            Win32Api.GetWindowRect(hWnd, ref windowRect);
+            int width = Math.Abs(windowRect.X - windowRect.Width);
+            int height = Math.Abs(windowRect.Y - windowRect.Height);
+            IntPtr hbitmap = Win32Api.CreateCompatibleBitmap(hscrdc, width, height);
+            IntPtr hmemdc = Win32Api.CreateCompatibleDC(hscrdc);
+            Win32Api.SelectObject(hmemdc, hbitmap);
+            Win32Api.PrintWindow(hWnd, hmemdc, 0);
+            Bitmap bmp = Image.FromHbitmap(hbitmap);
+            Win32Api.DeleteDC(hscrdc);//删除用过的对象
+            Win32Api.DeleteDC(hmemdc);//删除用过的对象
+            bmp.Save(@"c:\dd.jpg");
             Console.WriteLine("{0}", sp.TotalMilliseconds);
             Console.Read();
         }

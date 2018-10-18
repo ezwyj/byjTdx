@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace TdxAppMonitor
+namespace Core
 {
-    public static class GlobelVariable
+    public class Class1
     {
-
     }
 }

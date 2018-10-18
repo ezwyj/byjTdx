@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TdxAppMonitor", "TdxAppMoni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{7A5EA302-F388-46A1-9652-01E5A574382A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DZHAppMonitor", "..\DZHAppMonitor\DZHAppMonitor\DZHAppMonitor.csproj", "{AD73E050-CFE9-45C1-A3E9-FD87C2CD347A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\Core\Core.csproj", "{76E272B0-326E-440D-B044-5A9179619781}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{7A5EA302-F388-46A1-9652-01E5A574382A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A5EA302-F388-46A1-9652-01E5A574382A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A5EA302-F388-46A1-9652-01E5A574382A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD73E050-CFE9-45C1-A3E9-FD87C2CD347A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD73E050-CFE9-45C1-A3E9-FD87C2CD347A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD73E050-CFE9-45C1-A3E9-FD87C2CD347A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD73E050-CFE9-45C1-A3E9-FD87C2CD347A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E272B0-326E-440D-B044-5A9179619781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E272B0-326E-440D-B044-5A9179619781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E272B0-326E-440D-B044-5A9179619781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E272B0-326E-440D-B044-5A9179619781}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
-namespace TdxAppMonitor
+namespace DZHAppMonitor
 {
     static class Program
     {
@@ -17,9 +16,6 @@ namespace TdxAppMonitor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            
-
             Application.Run(new Form1());
         }
     }

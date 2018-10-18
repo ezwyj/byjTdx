@@ -13,16 +13,16 @@ namespace TdxAppMonitor
 
         private static Decimal ocrProcess(int i, Bitmap image)
         {
-            var page = GlobelVariable.OcrEngine[i].Process(image);
-            var result = page.GetText();
-            return decimal.Parse(result);
+           
+           
+            return decimal.Parse(i.ToString());
         }
         public static Decimal GetBuyOne(Bitmap bigImage)
         {
 
-            var image = ocrProcess(0,)
+            // var image = ocrProcess(0,)
 
-
+            throw new NotImplementedException();
         }
     }
 }
