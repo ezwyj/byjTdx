@@ -34,20 +34,26 @@ namespace Core
             var DzhProcessId = 0;
             foreach (var item in ProcessList)
             {
-                if (item.MainWindowTitle.IndexOf("") > 0 && item.ProcessName == "dzh2")
+                if (item.MainWindowTitle.IndexOf("大智慧") >= 0 && item.ProcessName == "dzh2")
                 {
                     DzhProcessId = item.Id;
+                    DZHMainHandler = item.MainWindowHandle;
                     break;
                 }
             }
-            DZHMainHandler = Process.GetProcessById(DzhProcessId).MainWindowHandle;
+            Win32Api.SetForegroundWindow(DZHMainHandler);
             IntPtr hscrdc = Win32Api.GetWindowDC(DZHMainHandler);
-            Rectangle windowRect = new Rectangle();
+            Win32Api.RECT windowRect = new Win32Api.RECT();
             Win32Api.GetWindowRect(DZHMainHandler, ref windowRect);
-            int width = Math.Abs(windowRect.X - windowRect.Width);
-            int height = Math.Abs(windowRect.Y - windowRect.Height);
+            int width = Convert.ToInt16( Math.Abs(windowRect.Right - windowRect.Left) * 1.25);
+            int height = Convert.ToInt32(Math.Abs(windowRect.Bottom - windowRect.Top) * 1.25); ;
             hbitmap = Win32Api.CreateCompatibleBitmap(hscrdc, width, height);
             hmemdc = Win32Api.CreateCompatibleDC(hscrdc);
+            Win32Api.SelectObject(hmemdc, hbitmap);
+            Win32Api.PrintWindow(DZHMainHandler, hmemdc, 0);
+            Win32Api.DeleteDC(hmemdc);
+
+
         }
         
 
@@ -56,7 +62,7 @@ namespace Core
             while (1 == 1)
             {
                 var appImage = Screenshot();
-                MainImage.Enqueue(appImage);
+
                 System.Threading.Thread.Sleep(IntervalTime);
             }
         }
@@ -68,29 +74,34 @@ namespace Core
         {
            
             Win32Api.SetForegroundWindow(DZHMainHandler);
-            Win32Api.SelectObject(hmemdc, hbitmap);
-            Win32Api.PrintWindow(DZHMainHandler, hmemdc, 0);
+           
             Bitmap bmp = Image.FromHbitmap(hbitmap);
             
             if (Debug)
             {
-                var fileName = System.AppDomain.CurrentDomain.BaseDirectory+ "MinaImg"+DateTime.Now.ToString("yyyyMMddhhmmssfff");
+                var fileName = System.AppDomain.CurrentDomain.BaseDirectory+ "MinaImg"+DateTime.Now.ToString("yyyyMMddhhmmssfff")+".png";
                 bmp.Save(fileName);
             }
             return bmp;
         }
         /// <summary>
-        /// 并行切图
+        /// 切图
         /// </summary>
-        public void CatImage()
+        public void CatImage(Bitmap bmp, int i)
         {
-            while (1 == 1)
+            System.Drawing.Rectangle rectangle = new Rectangle();
+            rectangle.X = Convert.ToInt16( _monitorList[i].X*1.25);
+            rectangle.Y = Convert.ToInt16(_monitorList[i].Y*1.25);
+            rectangle.Width = _monitorList[i].Width;
+            rectangle.Height = _monitorList[i].Height;
+            Bitmap catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            if(Debug)
             {
-                Bitmap toDoImage;
+                var fileName = System.AppDomain.CurrentDomain.BaseDirectory + "catImg1" + DateTime.Now.ToString("yyyyMMddhhmmssfff") + ".png";
+                catedImage.Save(fileName);
 
-                MainImage.TryDequeue(out toDoImage);
-                
             }
+            
         }
 
 

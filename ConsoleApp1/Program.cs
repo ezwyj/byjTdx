@@ -96,7 +96,7 @@ namespace ConsoleApp1
             Win32Api.DeleteDC(hmemdc);//删除用过的对象
             bmp.Save(@"c:\dd"+ DateTime.Now.ToString("yyyyMMddhhmmss") + ".jpg");
 
-            Parallel.Invoke(Ocr(bmp, 0), Ocr(bmp, 1), Ocr(bmp, 2));
+            Parallel.Invoke(()=>Ocr(bmp, 0),()=> Ocr(bmp, 1),()=> Ocr(bmp, 2));
             
 
             Console.WriteLine("{0}", sw.ElapsedMilliseconds);

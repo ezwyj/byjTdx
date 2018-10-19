@@ -32,7 +32,7 @@ namespace Core
     {
         #region GetWindowCapture的dll引用
         [DllImport("user32.dll")]
-        public static extern IntPtr GetWindowRect(IntPtr hWnd, ref Rectangle rect);
+        public static extern IntPtr GetWindowRect(IntPtr hWnd, ref RECT rect);
 
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateCompatibleDC(
@@ -78,5 +78,14 @@ namespace Core
 
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;                             //最左坐标
+            public int Top;                             //最上坐标
+            public int Right;                           //最右坐标
+            public int Bottom;                        //最下坐标
+        }
     }
 }
