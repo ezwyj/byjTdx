@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{12F53858-2E84-48AA-B3B3-0EE76EE29751}</ProjectGuid>
+    <ProjectGuid>{F5C59C88-3643-4228-B8AC-F7E238849B07}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TdxAppMonitor</RootNamespace>
-    <AssemblyName>TdxAppMonitor</AssemblyName>
+    <RootNamespace>LocationConfigApp</RootNamespace>
+    <AssemblyName>LocationConfigApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -51,12 +51,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobelVariable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TDXAnalysis.cs" />
-    <Compile Include="UnitHelper.cs" />
-    <Compile Include="WinApiHelper.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -66,7 +65,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -76,7 +74,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="screenTDX.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

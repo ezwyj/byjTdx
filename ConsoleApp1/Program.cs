@@ -17,9 +17,9 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
-
-
+            //DateTime start = DateTime.Now;
 
             //IntPtr ptr = (IntPtr)0x20BA6;
             //Rect AppRect = new Rect();
@@ -31,10 +31,10 @@ namespace ConsoleApp1
 
             //// make sure temp directory is there or it will throw.
 
-           
+
 
             //bmp.Save(@"c:\test.jpg", ImageFormat.Jpeg);
-            List<IntPtr> listWnd = new List<IntPtr>();
+            //List<IntPtr> listWnd = new List<IntPtr>();
             //EnumChildWindows(ptr, new EnumWindowProc(delegate (IntPtr hwnd, IntPtr lParam)
             //{
             //    int length = GetTextBoxTextLength(hwnd);
@@ -60,24 +60,24 @@ namespace ConsoleApp1
             //}
             //var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
             //ocr.SetVariable("tessedit_char_whitelist", "0123456789");
-            DateTime start = DateTime.Now;
+
             //var img = new Bitmap(@"c:\bb.png");
             ////var img = CaptureScreen(1525, 187, 200, 20);
-            
+
             //var page = ocr.Process(img);
             //var result = page.GetText();
-            DateTime end = DateTime.Now;
-            TimeSpan sp = end - start;
-            var ProcessList = Process.GetProcessesByName("DZH2");
+
+            var ProcessList = Process.GetProcesses();
             var DzhProcessId = 0;
-            foreach(var item in ProcessList)
+            foreach (var item in ProcessList)
             {
-                if (item.MainWindowTitle.IndexOf("大智慧") > 0)
+                if (item.MainWindowTitle.IndexOf("Notepad++") > 0 && item.ProcessName == "notepad++")
                 {
                     DzhProcessId = item.Id;
+                    break;
                 }
             }
-           
+
             var result = Process.GetProcessById(DzhProcessId).MainWindowHandle;
             var hWnd = result;
             IntPtr hscrdc = Win32Api.GetWindowDC(hWnd);
@@ -87,14 +87,25 @@ namespace ConsoleApp1
             int height = Math.Abs(windowRect.Y - windowRect.Height);
             IntPtr hbitmap = Win32Api.CreateCompatibleBitmap(hscrdc, width, height);
             IntPtr hmemdc = Win32Api.CreateCompatibleDC(hscrdc);
+            DateTime start = DateTime.Now;
             Win32Api.SelectObject(hmemdc, hbitmap);
             Win32Api.PrintWindow(hWnd, hmemdc, 0);
             Bitmap bmp = Image.FromHbitmap(hbitmap);
+            DateTime end = DateTime.Now;
             Win32Api.DeleteDC(hscrdc);//删除用过的对象
             Win32Api.DeleteDC(hmemdc);//删除用过的对象
-            bmp.Save(@"c:\dd.jpg");
-            Console.WriteLine("{0}", sp.TotalMilliseconds);
+            bmp.Save(@"c:\dd"+ DateTime.Now.ToString("yyyyMMddhhmmss") + ".jpg");
+
+            Parallel.Invoke(Ocr(bmp, 0), Ocr(bmp, 1), Ocr(bmp, 2));
+            
+
+            Console.WriteLine("{0}", sw.ElapsedMilliseconds);
             Console.Read();
+        }
+
+        private static void Ocr(Bitmap bmp,int i)
+        {
+
         }
 
         private static Bitmap CaptureScreen(double x, double y, double width, double height)

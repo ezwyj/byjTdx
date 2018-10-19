@@ -74,6 +74,9 @@ namespace Core
         public static extern int Process32Next(IntPtr handle, ref ProcessEntry32 pe);
 
         [DllImport("User32.dll", EntryPoint = "SendMessage")]
-        private static extern int SendMessage(int hWnd, int Msg, int wParam, string lParam);
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, string lParam);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
     }
 }

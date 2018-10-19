@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DZHAppMonitor", "..\DZHAppM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\Core\Core.csproj", "{76E272B0-326E-440D-B044-5A9179619781}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "..\UnitTest\UnitTest.csproj", "{B6237E54-0A5F-41C5-BB5C-F417B5D42063}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationConfigApp", "LocationConfigApp\LocationConfigApp.csproj", "{F5C59C88-3643-4228-B8AC-F7E238849B07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{76E272B0-326E-440D-B044-5A9179619781}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76E272B0-326E-440D-B044-5A9179619781}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76E272B0-326E-440D-B044-5A9179619781}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6237E54-0A5F-41C5-BB5C-F417B5D42063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6237E54-0A5F-41C5-BB5C-F417B5D42063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6237E54-0A5F-41C5-BB5C-F417B5D42063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6237E54-0A5F-41C5-BB5C-F417B5D42063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C59C88-3643-4228-B8AC-F7E238849B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C59C88-3643-4228-B8AC-F7E238849B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C59C88-3643-4228-B8AC-F7E238849B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C59C88-3643-4228-B8AC-F7E238849B07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
