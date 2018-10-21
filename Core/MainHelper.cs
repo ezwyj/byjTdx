@@ -29,7 +29,11 @@ namespace Core
             Debug = isDebug;
             _monitorList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MonitorLocation>>(configJson);
             OcrEngine = new List<TesseractEngine>(_monitorList.Count);
-           
+            for(int i=0;i<_monitorList.Count;i++)
+            {
+                OcrEngine.Add( new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly));
+                OcrEngine[i].SetVariable("tessedit_char_whitelist", "0123456789");
+            }
             var ProcessList = Process.GetProcesses();
             var DzhProcessId = 0;
             foreach (var item in ProcessList)
@@ -101,16 +105,19 @@ namespace Core
                 catedImage.Save(fileName);
 
             }
-            
+            Ocr(catedImage, i);
         }
 
 
         /// <summary>
         /// 并行ocr
         /// </summary>
-        public void Ocr (Bitmap main,int i)
+        public void Ocr (Bitmap img,int i)
         {
 
+            var page = OcrEngine[i].Process(img);
+            var result = page.GetText();
+            Console.WriteLine("结果:" + result);
         }
     }
 }

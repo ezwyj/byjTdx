@@ -17,14 +17,14 @@ namespace UnitTest
         {
             MainHelper testClass = null;
             var one = new MonitorLocation();
-            one.X = 1216;
+            one.X = 1247;
             one.Y = 311;
-            one.Width = 45;
+            one.Width = 50;
             one.Height = 18;
             one.Name = "买一";
 
             var two =  new MonitorLocation();
-            two.X = 1105;
+            two.X = 1139;
             two.Y = 88;
             two.Height = 23;
             two.Width = 79;
@@ -34,7 +34,7 @@ namespace UnitTest
             list.Add(one);
             list.Add(two);
 
-            testClass = new MainHelper(Newtonsoft.Json.JsonConvert.SerializeObject(list).ToString(), true);
+            testClass = new MainHelper(Newtonsoft.Json.JsonConvert.SerializeObject(list).ToString(), false);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
