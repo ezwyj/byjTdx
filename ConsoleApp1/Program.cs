@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using Tesseract;
 
 namespace ConsoleApp1
 {
@@ -58,48 +58,64 @@ namespace ConsoleApp1
 
             //    }), (IntPtr)0);
             //}
-            //var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
-            //ocr.SetVariable("tessedit_char_whitelist", "0123456789");
+            var ocr = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
+            ocr.SetVariable("tessedit_char_whitelist", "买");
 
-            //var img = new Bitmap(@"c:\bb.png");
-            ////var img = CaptureScreen(1525, 187, 200, 20);
+            var img = new Bitmap(@"c:\aa.png");
+            //var img = CaptureScreen(1525, 187, 200, 20);
 
-            //var page = ocr.Process(img);
-            //var result = page.GetText();
-
-            var ProcessList = Process.GetProcesses();
-            var DzhProcessId = 0;
-            foreach (var item in ProcessList)
+            var page = ocr.Process(img);
+            using (var iterator = page.GetIterator())
             {
-                if (item.MainWindowTitle.IndexOf("Notepad++") > 0 && item.ProcessName == "notepad++")
+
+                iterator.Begin();
+                do
                 {
-                    DzhProcessId = item.Id;
-                    break;
+                    string currentWord = iterator.GetText(PageIteratorLevel.Word);
+                    //do something with bounds 
+                    Tesseract.Rect bounds;
+                    iterator.TryGetBoundingBox(PageIteratorLevel.Word, out bounds);
+                    Console.WriteLine(currentWord);
                 }
+                while (iterator.Next(PageIteratorLevel.Word));
             }
 
-            var result = Process.GetProcessById(DzhProcessId).MainWindowHandle;
-            var hWnd = result;
-            IntPtr hscrdc = Win32Api.GetWindowDC(hWnd);
-            Rectangle windowRect = new Rectangle();
-            Win32Api.GetWindowRect(hWnd, ref windowRect);
-            int width = Math.Abs(windowRect.X - windowRect.Width);
-            int height = Math.Abs(windowRect.Y - windowRect.Height);
-            IntPtr hbitmap = Win32Api.CreateCompatibleBitmap(hscrdc, width, height);
-            IntPtr hmemdc = Win32Api.CreateCompatibleDC(hscrdc);
-            DateTime start = DateTime.Now;
-            Win32Api.SelectObject(hmemdc, hbitmap);
-            Win32Api.PrintWindow(hWnd, hmemdc, 0);
-            Bitmap bmp = Image.FromHbitmap(hbitmap);
-            DateTime end = DateTime.Now;
-            Win32Api.DeleteDC(hscrdc);//删除用过的对象
-            Win32Api.DeleteDC(hmemdc);//删除用过的对象
-            bmp.Save(@"c:\dd"+ DateTime.Now.ToString("yyyyMMddhhmmss") + ".jpg");
+            var result = page.GetText();
+            Console.WriteLine(result);
 
-            Parallel.Invoke(Ocr(bmp, 0), Ocr(bmp, 1), Ocr(bmp, 2));
+            //var ProcessList = Process.GetProcesses();
+            //var DzhProcessId = 0;
+            //foreach (var item in ProcessList)
+            //{
+            //    if (item.MainWindowTitle.IndexOf("Notepad++") > 0 && item.ProcessName == "notepad++")
+            //    {
+            //        DzhProcessId = item.Id;
+            //        break;
+            //    }
+            //}
+
+            //var result = Process.GetProcessById(DzhProcessId).MainWindowHandle;
+            //var hWnd = result;
+            //IntPtr hscrdc = Win32Api.GetWindowDC(hWnd);
+            //Rectangle windowRect = new Rectangle();
+            //Win32Api.GetWindowRect(hWnd, ref windowRect);
+            //int width = Math.Abs(windowRect.X - windowRect.Width);
+            //int height = Math.Abs(windowRect.Y - windowRect.Height);
+            //IntPtr hbitmap = Win32Api.CreateCompatibleBitmap(hscrdc, width, height);
+            //IntPtr hmemdc = Win32Api.CreateCompatibleDC(hscrdc);
+            //DateTime start = DateTime.Now;
+            //Win32Api.SelectObject(hmemdc, hbitmap);
+            //Win32Api.PrintWindow(hWnd, hmemdc, 0);
+            //Bitmap bmp = Image.FromHbitmap(hbitmap);
+            //DateTime end = DateTime.Now;
+            //Win32Api.DeleteDC(hscrdc);//删除用过的对象
+            //Win32Api.DeleteDC(hmemdc);//删除用过的对象
+            //bmp.Save(@"c:\dd"+ DateTime.Now.ToString("yyyyMMddhhmmss") + ".jpg");
+
+            //Parallel.Invoke(Ocr(bmp, 0), Ocr(bmp, 1), Ocr(bmp, 2));
             
 
-            Console.WriteLine("{0}", sw.ElapsedMilliseconds);
+            //Console.WriteLine("{0}", sw.ElapsedMilliseconds);
             Console.Read();
         }
 
