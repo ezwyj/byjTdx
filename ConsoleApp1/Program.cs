@@ -18,7 +18,7 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-
+            sw.Start();
             //DateTime start = DateTime.Now;
 
             //IntPtr ptr = (IntPtr)0x20BA6;
@@ -75,13 +75,17 @@ namespace ConsoleApp1
                     //do something with bounds 
                     Tesseract.Rect bounds;
                     iterator.TryGetBoundingBox(PageIteratorLevel.Word, out bounds);
+                    Console.WriteLine("x1" + bounds.X1.ToString());
+                    Console.WriteLine("Y1" + bounds.Y1.ToString());
+                    Console.WriteLine("x2" + bounds.X2.ToString());
+                    Console.WriteLine("y2" + bounds.Y2.ToString());
                     Console.WriteLine(currentWord);
                 }
                 while (iterator.Next(PageIteratorLevel.Word));
             }
 
-            var result = page.GetText();
-            Console.WriteLine(result);
+            //var result = page.GetText();
+            //Console.WriteLine(result);
 
             //var ProcessList = Process.GetProcesses();
             //var DzhProcessId = 0;
@@ -113,9 +117,9 @@ namespace ConsoleApp1
             //bmp.Save(@"c:\dd"+ DateTime.Now.ToString("yyyyMMddhhmmss") + ".jpg");
 
             //Parallel.Invoke(Ocr(bmp, 0), Ocr(bmp, 1), Ocr(bmp, 2));
-            
 
-            //Console.WriteLine("{0}", sw.ElapsedMilliseconds);
+            sw.Stop();
+            Console.WriteLine("{0}", sw.ElapsedMilliseconds);
             Console.Read();
         }
 
