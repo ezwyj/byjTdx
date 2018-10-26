@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +15,40 @@ namespace ConsoleApp1
 {
     class Program
     {
-       
+        public static class AccessToken
 
-        static void Main(string[] args)
         {
+            // 调用getAccessToken()获取的 access_token建议根据expires_in 时间 设置缓存
+            // 返回token示例
+            public static String TOKEN = "24.adda70c11b9786206253ddb70affdc46.2592000.1493524354.282335-1234567";
+
+            // 百度云中开通对应服务应用的 API Key 建议开通应用的时候多选服务
+            private static String clientId = "nN5shGjIsPuVK0dN3cZP56rN";
+            // 百度云中开通对应服务应用的 Secret Key
+            private static String clientSecret = "pyik6Od7p1kgnL4BdX3MefAqjHM2SNHd";
+
+            public static String getAccessToken()
+            {
+                String authHost = "https://aip.baidubce.com/oauth/2.0/token";
+                HttpClient client = new HttpClient();
+                List<KeyValuePair<String, String>> paraList = new List<KeyValuePair<string, string>>();
+                paraList.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
+                paraList.Add(new KeyValuePair<string, string>("client_id", clientId));
+                paraList.Add(new KeyValuePair<string, string>("client_secret", clientSecret));
+
+                HttpResponseMessage response = client.PostAsync(authHost, new FormUrlEncodedContent(paraList)).Result;
+                String result = response.Content.ReadAsStringAsync().Result;
+                TOKEN = result;
+                Console.WriteLine(result);
+                return result;
+            }
+        }
+ 
+
+    static void Main(string[] args)
+        {
+
+            
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             //DateTime start = DateTime.Now;
@@ -58,31 +90,86 @@ namespace ConsoleApp1
 
             //    }), (IntPtr)0);
             //}
-            var ocr = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
-            ocr.SetVariable("tessedit_char_whitelist", "买");
+            var fileList = new string[] { "A", "B", "C", "D" };
+            var APP_ID = "14565074";
+            var API_KEY = "nN5shGjIsPuVK0dN3cZP56rN";
+            var SECRET_KEY = "pyik6Od7p1kgnL4BdX3MefAqjHM2SNHd";
 
-            var img = new Bitmap(@"c:\aa.png");
-            //var img = CaptureScreen(1525, 187, 200, 20);
-
-            var page = ocr.Process(img);
-            using (var iterator = page.GetIterator())
+            var client = new Baidu.Aip.Ocr.Ocr(API_KEY, SECRET_KEY);
+            foreach (var fItem in fileList)
             {
+                //var ocr = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
+                //ocr.SetVariable("tessedit_char_whitelist", "委买卖一");
 
-                iterator.Begin();
-                do
-                {
-                    string currentWord = iterator.GetText(PageIteratorLevel.Word);
-                    //do something with bounds 
-                    Tesseract.Rect bounds;
-                    iterator.TryGetBoundingBox(PageIteratorLevel.Word, out bounds);
-                    Console.WriteLine("x1" + bounds.X1.ToString());
-                    Console.WriteLine("Y1" + bounds.Y1.ToString());
-                    Console.WriteLine("x2" + bounds.X2.ToString());
-                    Console.WriteLine("y2" + bounds.Y2.ToString());
-                    Console.WriteLine(currentWord);
-                }
-                while (iterator.Next(PageIteratorLevel.Word));
+                var img = new Bitmap(@"C:\Saved Pictures\" + fItem + ".png");
+                var image = File.ReadAllBytes(@"C:\Saved Pictures\" + fItem + ".png");
+                // 调用通用文字识别, 图片参数为本地图片，可能会抛出网络等异常，请使用try/catch捕获
+                var options = new Dictionary<string, object>{
+                    {"recognize_granularity", "big"},
+                    {"language_type", "CHN_ENG"},
+                    {"detect_direction", "true"},
+                    {"detect_language", "true"},
+                    {"vertexes_location", "true"},
+                    {"probability", "true"}
+                };
+                // 带参数调用通用文字识别（含位置信息版）, 图片参数为本地图片
+                var result = client.General(image, options);
+                var show = result["words_result"].ToList();
+                var one = show.Where(a => a["words"].ToString().StartsWith("委买队列")).FirstOrDefault();
+                Pen myPen = new Pen(System.Drawing.Color.BurlyWood, 3);
+
+                var g = Graphics.FromImage(img);
+                int width = Convert.ToUInt16( one["location"]["width"].ToString());
+                int height = Convert.ToUInt16(one["location"]["height"].ToString());
+                int x = Convert.ToUInt16(one["location"]["left"].ToString());
+                int y = Convert.ToUInt16(one["location"]["top"].ToString());
+
+                g.DrawRectangle(myPen, new Rectangle(x,y,width,height));
+                Console.WriteLine(one);
+
+
+
+
+                ////var img = CaptureScreen(1525, 187, 200, 20);
+                //Pen myPen = new Pen(System.Drawing.Color.BurlyWood, 3);
+                //var g = Graphics.FromImage(img);
+                //var page = ocr.Process(img);
+                //using (var iterator = page.GetIterator())
+                //{
+
+                //    iterator.Begin();
+                //    do
+                //    {
+                //        string currentWord = iterator.GetText(PageIteratorLevel.Word);
+                //        //do something with bounds 
+                //        Tesseract.Rect bounds;
+                //        iterator.TryGetBoundingBox(PageIteratorLevel.Word, out bounds);
+                //        Console.WriteLine("x1" + bounds.X1.ToString());
+                //        Console.WriteLine("Y1" + bounds.Y1.ToString());
+                //        Console.WriteLine("x2" + bounds.X2.ToString());
+                //        Console.WriteLine("y2" + bounds.Y2.ToString());
+                //        Console.WriteLine(currentWord);
+                //        //if (currentWord.IndexOf("委") > 0 && (currentWord.IndexOf("买") > 0 || currentWord.IndexOf("卖") > 0))
+                //        //{
+                //        //    g.DrawRectangle(myPen, new Rectangle(bounds.X1, bounds.Y1, bounds.X2, bounds.Y2));
+                //        //}
+                //        if (currentWord.IndexOf("一") > 0 && (currentWord.IndexOf("买") > 0 || currentWord.IndexOf("卖") > 0))
+                //        {
+                //            g.DrawRectangle(myPen, new Rectangle(bounds.X1, bounds.Y1, bounds.X2, bounds.Y2));
+                //        }
+
+                //    }
+                //    while (iterator.Next(PageIteratorLevel.Word));
+                //}
+
+
+                Bitmap bmp = new Bitmap(img);
+                img.Dispose();
+                bmp.Save(@"C:\Saved Pictures\" + fItem + "_b.png"); //
+
+
             }
+            
 
             //var result = page.GetText();
             //Console.WriteLine(result);
